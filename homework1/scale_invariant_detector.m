@@ -1,7 +1,8 @@
-level=12;
+level=20;
 initial_sigma = 2
 img=imread("img/test.png");
-gray_img=rgb2gray(img);
+imDouble = im2double(img);
+gray_img=rgb2gray(imDouble);
 size(gray_img)
 %normalize
 [scale_space,sigma]=create_scale_space(gray_img,initial_sigma,level);
@@ -17,7 +18,7 @@ for i=1:size(blob_location,1)
     R=blob_location(i,3)
     y=R*cos(alpha)+blob_location(i,1);
     x=R*sin(alpha)+blob_location(i,2);
-    plot(x,y,'r-')
+    plot(x,y,'r-','linewidth',2)
     axis equal
 end
 

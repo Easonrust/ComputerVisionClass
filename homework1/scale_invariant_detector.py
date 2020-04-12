@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Dec  5 14:49:57 2018
+@author: MyReservoir
+"""
+
+
 import cv2
 import sys
 import numpy as np
@@ -93,47 +101,42 @@ def max_supression(scale_space, sigma, threshold_factor, level):
     return blob_location
 
 
-def create_scale_space(gray_image, initial_sigma, level):
+def create_scale_space(gray_image, sigma_scale_factor, initial_sigma, level):
     h, w = np.shape(gray_image)
     scale_space = np.zeros((h, w, level), np.float32)
-    sigma = []
-    sigma.append(initial_sigma)
+    sigma = [0] * (level + 1)
+    sigma[0] = initial_sigma
     for i in range(0, level):
-        if i > 0:
-            sigma[i] = sigma[i - 1] * initial_sigma
         print("Convolving with sigma={}".format(sigma[i]))
         kernel = laplacian_of_gaussian_filter(sigma[i])
-
-        # LoG filter * image
         convolved_image = convolve(gray_image, kernel)
-        cv2.imshow("LoG Convolved Image with sigma={}".format(sigma[i]), convolved_image)
+        cv2.imshow(
+            "LoG Convolved Image with sigma={}".format(sigma[i]), convolved_image
+        )
         scale_space[:, :, i] = np.square(convolved_image)
-
+        sigma[i + 1] = sigma[i] * sigma_scale_factor
     return scale_space, sigma
 
 
 def main():
     # -----------Modify these parameters-----------
-    level = 6
+    level = 12
     threshold_factor = 0.02
-    initial_sigma = 1.35
+    initial_sigma = 2
+    sigma_scale_factor = np.sqrt(2)
     # ---------------------------------------------
 
     filelocation = "img/test.png"
     image = read_images(filelocation)
-
-    # 把图像转换为灰度图
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    
-    # 进行归一化
     gray_image = cv2.normalize(
         gray_image.astype("float"), None, 0.0, 1.0, cv2.NORM_MINMAX
     )
 
-    # start_time = time.time()
-    
-    #返回生成的scale space
-    scale_space, sigma = create_scale_space(gray_image, initial_sigma, level)
+    start_time = time.time()
+    scale_space, sigma = create_scale_space(
+        gray_image, sigma_scale_factor, initial_sigma, level
+    )
 
     blob_location = max_supression(scale_space, sigma, threshold_factor, level)
     no_of_blobs = len(blob_location)

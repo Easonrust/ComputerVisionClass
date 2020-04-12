@@ -1,22 +1,20 @@
 function [scale_space,sigma] = create_scale_space(gray_img,initial_sigma,level)
 [h,w]=size(gray_img);
 scale_space=zeros(h,w,level);
-scale_space=im2uint8(scale_space);
+scale_space=im2double(scale_space);
 sigma=zeros(1,level);
 sigma(1)=initial_sigma;
 for i=1:level
     if i>1
-        sigma(i) = sigma(i - 1) * sqrt(2)
+        sigma(i) = sigma(i - 1) * 1.2509;
     end
-    hsize=round(6*sigma(i));
-    if mod(hsize,2)==0
-        hsize=hsize+1;
-    end
-    h = sigma(i)*sigma(i)*fspecial('log', [hsize hsize], sigma(i));
-    convolved_image=imfilter(gray_img,h);
+    hsize=floor(6*sigma(i)+1);
+    h = sigma(i)*sigma(i)*fspecial('log', hsize, sigma(i));
+    convolved_image=imfilter(gray_img,h,'replicate');
     
     scale_space(:,:,i)=convolved_image;
     size(convolved_image);
+    imshow(convolved_image);
   
 end
     

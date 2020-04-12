@@ -1,4 +1,3 @@
-img=imread('img/test.png');
-imshow(img);
-pt=LoG_Blob(rgb2gray(img));
-draw(img,pt,'LOG')
+img=[1 1 1;1 1 1;1 1 1];
+img=imdilate(img,ones(3,3));
+img
