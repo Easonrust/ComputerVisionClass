@@ -8,7 +8,7 @@ blob_location=[];
 for i=2:(size(scale_space,1)-1)
     for j=2:(size(scale_space,2)-1)
         for k=2:(size(scale_space,3)-1)
-            if scale_space(i,j,k)<0.1
+            if scale_space(i,j,k)<0.08
                 continue
             end
             firstRelation=0;

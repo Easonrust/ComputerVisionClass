@@ -1,4 +1,4 @@
-level=20;
+level=12;
 initial_sigma = 2
 img=imread("img/test.png");
 imDouble = im2double(img);
