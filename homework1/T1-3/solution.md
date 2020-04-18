@@ -1,14 +1,3 @@
-$
-\left[
- \begin{matrix}
-   a & b & c & d & e\\
-   f & g & h & i & j \\
-   k & l & m & n & o \\
-   p & q & r & s & t
-  \end{matrix} 
-\right]
-$
-
 ## Q1
 
 To prove the set ${M_i}$ forms a group, we need to prove that it satisfies the four properties of a group. The processes are as follows.
@@ -113,3 +102,15 @@ So $DoG$ can approximate $LoG$.
 
 ## Q3
 
+$A^TA$ is a $n*n$ matrix, so we need to prove $Rank(A^TA)=n$, then $A^TA$ is non-singlar.
+
+That is to say, we need to prove $Rank(A^TA)=Rank(A)$.
+
+Then we need to prove $A^TAx=0$ and $Ax=0$ have the same solutions.
+
+1. For $Ax=0$, we have $A^T(Ax)=0$, then $A^TAx=0$. So the solution of $Ax=0$ is also the solution of $A^TAx=0$.
+2. For $A^TAx=0$, we have $x^TA^TAx=0$, Then $(Ax)^TAx=0$, so $Ax=0$. Therefore, the solution of $A^TAx=0$ is also the solution of $Ax=0$.
+
+So $A^TAx=0$ and $Ax=0$ have the same solutions.
+
+Then $Rank(A^TA)=Rank(A)=n$, plus $A^TA$ is $n*n$, so  $A^TA$ is non-singlar.

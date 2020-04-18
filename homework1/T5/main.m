@@ -1,91 +1,27 @@
-imgColor1 = imread('images/sse1.bmp');
-imgColor2 = imread('images/sse2.bmp');
+img1 = imread('images/sse1.bmp');
+img2 = imread('images/sse2.bmp');
+simg1=im2single(img1);
+simg2=im2single(img2);
 
-img1_double = double(rgb2gray(imgColor1));
-img2_double = double(rgb2gray(imgColor2));
+dgimg1 = double(rgb2gray(img1));
+dgimg2 = double(rgb2gray(img2));
 
-img1 = single(rgb2gray(imgColor1));
-img2 = single(rgb2gray(imgColor2));
+sgimg1 = single(rgb2gray(img1));
+sgimg2 = single(rgb2gray(img2));
 
-imgColor1 = double(imgColor1);
-imgColor2 = double(imgColor2);
+dimg1 = double(img1);
+dimg2 = double(img2);
 
 % Compute the SIFT key points as well as the descriptors using vl_sift
-[f1,d1] = vl_sift(img1); 
-[f2,d2] = vl_sift(img2);
+[f1,d1] = vl_sift(sgimg1); 
+[f2,d2] = vl_sift(sgimg2);
 
 f1(1:2,:) = uint16(f1(1:2,:));
 f2(1:2,:) = uint16(f2(1:2,:));
 
 
-
-% % Match the descriptors in both images by computing the Euclidean distance.
-% % The match should be a two-way match, that is, the point in img1 matches
-% % the point most in img2, and THE point in img2 matches the point most in
-% % img1.
-% [~,N1] = size(d1);
-% [~,N2] = size(d2);
-% distance = zeros(N1,N2);
-% 
-% % Parameter for matching supression
-% sigma = 0.7;
-% 
-% for i=1:N1
-%     for j=1:N2
-%         subtract = d1(:,i)-d2(:,j);
-%         distance(i,j) = norm(double(subtract));
-%     end
-% end 
-% 
-% matchArr = zeros(2,max([N1,N2]));
-% for i=1:N1
-%     subDist = distance(i,:);
-%     sortDistance = sort(subDist);
-%     if(sortDistance(1) < sigma*sortDistance(2))
-%         j=find(subDist==sortDistance(1));
-%         matchArr(1,i) = j;
-%     end
-% end
-% 
-% for j=1:N2
-%     subDist = distance(:,j);
-%     sortDistance = sort(subDist);
-%     if(sortDistance(1) < sigma*sortDistance(2))
-%         i=find(subDist==sortDistance(1));
-%         matchArr(2,j) = i;
-%     end
-% end
-% 
-% finalMatchArr = [];
-% tempMatchArr = find(matchArr(1,:));
-% for i = tempMatchArr
-%     colIndex = matchArr(1,i);
-%     rowIndex = matchArr(2,colIndex);
-%     
-%     if rowIndex == i
-%         finalMatchArr = [finalMatchArr; [rowIndex, colIndex]];
-%     end
-% end
-% 
-% % Next we use RANSAC to filter the key points and compute the Affine Matrix
-% % between two images using ransanfithomography. Note that the rows and cols
-% % should be reversed.
-% point1 = [];
-% point2 = [];
-% for i = 1:size(finalMatchArr)
-%     pair = finalMatchArr(i,:);
-%     point1 = [point1; [f1(1,pair(1)),f1(2,pair(1))]];
-%     point2 = [point2; [f2(1,pair(2)),f2(2,pair(2))]];
-% end
-% 
-% point1 = point1';
-% point2 = point2';
-% N = size(point1,2);
-% P1 = [point1;ones(1,N)];
-% P2 = [point2;ones(1,N)];
-
 [matches, scores] = vl_ubcmatch(d1,d2) ;
-
+numMatches = size(matches,2) 
 
 
 point1 = f1(1:2,matches(1,:)) ; 
@@ -98,105 +34,31 @@ X2(3,:) = 1 ;
 t = 0.005;  % Distance threshold for deciding outliers
 [H, inliers] = ransacfithomography(X1, X2, t);
 
-inliers1 = point1(:,inliers);
-inliers2 = point2(:,inliers);
-m1 = inliers1';
-m2 = inliers2';
-x = 1:length(m2);
-corr = [x' x'];
+% --------------------------------------------------------------------
+%                                                         Show matches
+% --------------------------------------------------------------------
+
+dh1 = max(size(simg2,1)-size(simg1,1),0) ;
+dh2 = max(size(simg1,1)-size(simg2,1),0) ;
+
+figure(1) ; clf ;
+
+imagesc([padarray(simg1,dh1,'post') padarray(simg2,dh2,'post')]) ;
+o = size(simg1,2) ;
+line([f1(1,matches(1,:));f2(1,matches(2,:))+o], ...
+     [f1(2,matches(1,:));f2(2,matches(2,:))]) ;
+title(sprintf('%d tentative matches', numMatches)) ;
+axis image off ;
 
 
-% Finally we stitch two images 
-InverseOfH = inv(H);
-[rowsIm1, colsIm1] = size(img1_double);
-[rowsIm2, colsIm2] = size(img2_double);
-finalLeft = 1;
-finalRight = colsIm2;
-finalTop = 1;
-finalBot = rowsIm2;
 
-leftTopCornerCoord = H * [1;1;1];
-leftTopCornerCoord = leftTopCornerCoord / leftTopCornerCoord(3,1);
-if leftTopCornerCoord(1) < finalLeft
-    finalLeft = floor(leftTopCornerCoord(1));
-end
-if leftTopCornerCoord(2) < finalTop
-    finalTop = floor(leftTopCornerCoord(2));
-end
+% --------------------------------------------------------------------
+%                                                        Stitch images
+% --------------------------------------------------------------------
 
-RightTopCornerCoord = H * [colsIm1;1;1];
-RightTopCornerCoord = RightTopCornerCoord / RightTopCornerCoord(3,1);
-if RightTopCornerCoord(1) > finalRight
-    finalRight = floor(RightTopCornerCoord(1));
-end
-if RightTopCornerCoord(2) < finalTop
-    finalTop = floor(RightTopCornerCoord(2));
-end
+stitched_img=stitch_images(H,dimg1,dimg2);
 
-leftBotCornerCoord = H * [1;rowsIm1;1];
-leftBotCornerCoord = leftBotCornerCoord / leftBotCornerCoord(3,1);
-if leftBotCornerCoord(1) < finalLeft
-    finalLeft = floor(leftBotCornerCoord(1));
-end
-if leftBotCornerCoord(2) > finalBot
-    finalBot = floor(leftBotCornerCoord(2));
-end
 
-RightBotCornerCoord = H * [colsIm1;rowsIm1;1];
-RightBotCornerCoord = RightBotCornerCoord / RightBotCornerCoord(3,1);
-if RightBotCornerCoord(1) > finalRight
-    finalRight = floor(RightBotCornerCoord(1));
-end
-if RightBotCornerCoord(2) > finalBot
-    finalBot = floor(RightBotCornerCoord(2));
-end
-
-mergeRows = finalBot - finalTop + 1;
-mergeCols = finalRight - finalLeft + 1;
-transformedImage = zeros(mergeRows, mergeCols,3);
-for row = 1:mergeRows
-    for col = 1: mergeCols
-        currentCoord = [col+finalLeft-1;row+finalTop-1;1];
-        CoordInOriImage = InverseOfH * currentCoord;
-        CoordInOriImage = CoordInOriImage / CoordInOriImage(3,1);
-
-        xInSrcImage = CoordInOriImage(1,1);
-        yInSrcImage = CoordInOriImage(2,1);
-
-        floorY = floor(yInSrcImage);
-        floorX = floor(xInSrcImage);
-        ceilY = ceil(yInSrcImage);
-        ceilX = ceil(xInSrcImage);
-        normalizedX = xInSrcImage - floorX;
-        normalizedY = yInSrcImage - floorY;
-
-        if (floorX >= 1 && floorY >=1 && ceilX <= colsIm1 && ceilY <= rowsIm1) 
-            f00 = imgColor1(floorY,floorX,1);
-            f01 = imgColor1(ceilY,floorX,1);
-            f10 = imgColor1(floorY,ceilX,1);
-            f11 = imgColor1(ceilY,ceilX,1);
-            transformedImage(row,col,1) = f00 + normalizedX * (f10 - f00)+ ...
-                                        normalizedY * (f01 - f00) + ...
-                                        normalizedX*normalizedY*(f00-f10-f01+f11);
-
-            f00 = imgColor1(floorY,floorX,2);
-            f01 = imgColor1(ceilY,floorX,2);
-            f10 = imgColor1(floorY,ceilX,2);
-            f11 = imgColor1(ceilY,ceilX,2);
-            transformedImage(row,col,2) = f00 + normalizedX * (f10 - f00)+ ...
-                                        normalizedY * (f01 - f00) + ...
-                                        normalizedX*normalizedY*(f00-f10-f01+f11);
-
-            f00 = imgColor1(floorY,floorX,3);
-            f01 = imgColor1(ceilY,floorX,3);
-            f10 = imgColor1(floorY,ceilX,3);
-            f11 = imgColor1(ceilY,ceilX,3);
-            transformedImage(row,col,3) = f00 + normalizedX * (f10 - f00)+ ...
-                                        normalizedY * (f01 - f00) + ...
-                                        normalizedX*normalizedY*(f00-f10-f01+f11);
-        end
-    end
-end
-
-transformedImage(-finalTop + 2 : -finalTop + 1 + rowsIm2, -finalLeft + 2 : -finalLeft + 1 + colsIm2,:) = imgColor2;
-figure;imshow(uint8(transformedImage),[]);
+figure(2);
+imshow(stitched_img);
+title('result');
