@@ -26,8 +26,9 @@ To prove the set ${M_i}$ forms a group, we need to prove that it satisfies the f
   \end{aligned}
   $$
   
+
 Because of the feature of orthonormal matrix, $R_aR_B$ is also a orthonormal matrix. And it is easy to know that $R_at_b+t_a$ is still a 3*1 vector. So it satisfy closure.
-  
+
 - associativity
 
   Let $M_a, M_b, M_c$ are three elements of {$M_i$}
