@@ -45,9 +45,15 @@ for i=1:length(mask)
         k=k+1;
     end
 end
-p = polyfit(inliers(1,:),inliers(2,:),1);
+b=ones(1,11);
+A=[inliers(1,:);b];
+A=A';
+B=inliers(2,:);
+B=B';
+kb=pinv(A'*A)*A'*B
 
- xAxis = min(inliers(1,:)):max(inliers(1,:));
- yAxis = p(1)*xAxis + p(2);
- plot(xAxis,yAxis,'r-','LineWidth',2);
+ 
+xAxis = min(inliers(1,:)):max(inliers(1,:));
+yAxis = kb(1)*xAxis + kb(2);
+plot(xAxis,yAxis,'r-','LineWidth',2);
  
