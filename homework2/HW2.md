@@ -40,35 +40,39 @@ So $a,b,c$ are coplanar $\Leftrightarrow$ $\begin{vmatrix}x_1 & y_1&z_1&1 \\ x_2
 
 Based on the conditions, the process of the caculation is as follow:
 $$
-\frac{\mathrm{d}p_d}{\mathrm{d}p_n^T}=\begin{bmatrix} \frac{\partial x_d}{\partial x} & \frac{\partial x_d}{\partial y} \\ \frac{\partial y_d}{\partial x} & \frac{\partial y_d}{\partial y} \end{bmatrix}
+\begin{aligned}&\frac{\mathrm{d}p_d}{\mathrm{d}p_n^T}=\begin{bmatrix} \frac{\partial x_d}{\partial x} & \frac{\partial x_d}{\partial y} \\ \frac{\partial y_d}{\partial x} & \frac{\partial y_d}{\partial y} \end{bmatrix}\\
+&r^2=x^2+y^2\\
+&\frac{\partial r^2}{\partial x}=2x\\
+&\frac{\partial r^2}{\partial y}=2y
+\end{aligned}
 $$
 (1):
 $$
-\begin{aligned}\frac{\partial x_d}{\partial x}&=\frac{\partial[x+k_1x(x^2+y^2)+k_2x(x^2+y^2)^2+2 \rho_1 xy+\rho_2(x^2+y^2)+2\rho x^2+k_3x(x^2+y^2)^3 ]}{\partial x}\\
-&=\frac{\partial[(1+k_1y^2+k_2y^4+2\rho_1y+k_3y^6)x+3\rho_2x^2+(k_1+2k_2y^2+3k_3y^4)x^3+(k_2+3k_3y^2)x^5+k_3x^7]}{\partial x}\\
-&=1+k_1y2+k_2y^4+2\rho_1y+k_3y^6+6\rho_2x+(3k_1+6k_2y^2+9k_3y^4)x^2+(5k_2+15k_3y^2)x^4+7k_3x^6\end{aligned}
+\begin{aligned}\frac{\partial x_d}{\partial x}&=\frac{\partial[x+k_1r^2x+k_2(r^2)^2x+2 \rho_1 xy+\rho_2r^2+2\rho_2 x^2+k_3x(r^2)^3 ]}{\partial x}\\
+&=1+k_1(r^2+2x^2)+k_2[r^4+x(2r^2*2x)]+2\rho_1y+2\rho_2x+4\rho_2x+k_3[r^6+x(3r^4*2x)]\\
+&=1+(r^2+2x^2)k_1+(r^4+4r^2x^2)k_2+2\rho_1y+6\rho_2x+(r^6+6r^4x^2)k_3\end{aligned}
 $$
 (2):
 $$
-\begin{aligned}\frac{\partial x_d}{\partial y}&=\frac{\partial[x+k_1x(x^2+y^2)+k_2x(x^2+y^2)^2+2 \rho_1 xy+\rho_2(x^2+y^2)+2\rho x^2+k_3x(x^2+y^2)^3 ]}{\partial y}\\
-&=\frac{\partial[x+3\rho_2x^2+k_1x^3+k_2x^5+k_3x^7+2\rho_1xy+(k_1x+2k_2x^3+3k_3x^5)y^2+(3k_3x^3+k_2x)y^4+k_3xy^6]}{\partial y}\\
-&=2\rho_1x+(2k_1x+4k_2x^3+6k_3x^5)y+(12k_3x^3+4k_2x)y^3+6k_3xy^5\end{aligned}
+\begin{aligned}\frac{\partial x_d}{\partial y}&=\frac{\partial[x+k_1r^2x+k_2(r^2)^2x+2 \rho_1 xy+\rho_2r^2+2\rho_2 x^2+k_3x(r^2)^3 ]}{\partial y}\\
+&=2k_1xy+k_2x*2r^2*2y+2\rho_1x+2\rho_2y+k_3x*3r^4*2y\\
+&=2xyk_1+4r^2xyk_2+2\rho_1x+2\rho_2y+6xyr^4k_3\end{aligned}
 $$
 (3):
 $$
-\begin{aligned}\frac{\partial y_d}{\partial x}&=\frac{\partial[y+k_1y(x^2+y^2)+k_2y(x^2+y^2)^2+2\rho_2 xy+\rho_1(x^2+y^2)+2\rho_1y^2+k_3y(x^2+y^2)^3]}{\partial x}\\
-&=\frac{\partial[y+k_1y^3+k_2y^5+k_3y^7+2\rho_2yx+(k_1y+2k_2y^3+\rho_1+3k_3y^5)x^2+(k_2y+3k_3y^3)x^4+k_3yx^6]}{\partial x}\\
-&=2\rho_2y+(2k_1y+4k_2y^3+2\rho_1+6k_3y^5)x+(4k_2y+12k_3y^3)x^3+6k_3yx^5\end{aligned}
+\begin{aligned}\frac{\partial y_d}{\partial x}&=\frac{\partial[y+k_1r^2y+k_2(r^2)^2y+2 \rho_2 xy+\rho_1r^2+2\rho_1 y^2+k_3y(r^2)^3 ]}{\partial x}\\
+&=2k_1xy+k_2y*2r^2*2x+2\rho_1y+2\rho_2x+k_3y*3r^4*2x\\
+&=2xyk_1+4r^2xyk_2+2\rho_1y+2\rho_2x+6xyr^4k_3\end{aligned}
 $$
 (4):
 $$
-\begin{aligned}\frac{\partial y_d}{\partial y}&=\frac{\partial[y+k_1y(x^2+y^2)+k_2y(x^2+y^2)^2+2\rho_2 xy+\rho_1(x^2+y^2)+2\rho_1y^2+k_3y(x^2+y^2)^3]}{\partial y}\\
-&=\frac{\partial[\rho_1x^2+(1+k_1x^2+k_2x^4+2\rho_2 x+k_3x^6)y+3\rho_1y^2+(k_1+2k_2x^2+3k_3x^4)y^3+(k_2+3k_3x^2)y^5+k_3y^7]}{\partial y}\\
-&=1+k_1x^2+k_2x^4+2\rho_2 x+k_3x^6+6\rho_1y+(3k_1+6k_2x^2+9k_3x^4)y^2+(5k_2+15k_3x^2)y^4\end{aligned}
+\begin{aligned}\frac{\partial y_d}{\partial y}&=\frac{\partial[y+k_1r^2y+k_2(r^2)^2y+2 \rho_2 xy+\rho_1r^2+2\rho_1 y^2+k_3y(r^2)^3 ]}{\partial y}\\
+&=1+k_1(r^2+2y^2)+k_2[r^4+y(2r^2*2y)]+2\rho_2x+2\rho_1y+4\rho_1y+k_3[r^6+y(3r^4*2y)]\\
+&=1+(r^2+2y^2)k_1+(r^4+4r^2y^2)k_2+2\rho_2x+6\rho_1y+(r^6+6r^4y^2)k_3\end{aligned}
 $$
 So
 $$
-\frac{\mathrm{d}p_d}{\mathrm{d}p_n^T}=\begin{bmatrix} 1+k_1y2+k_2y^4+2\rho_1y+k_3y^6+6\rho_2x+(3k_1+6k_2y^2+9k_3y^4)x^2+(5k_2+15k_3y^2)x^4+7k_3x^6 & 2\rho_1x+(2k_1x+4k_2x^3+6k_3x^5)y+(12k_3x^3+4k_2x)y^3+6k_3xy^5 \\ 2\rho_2y+(2k_1y+4k_2y^3+2\rho_1+6k_3y^5)x+(4k_2y+12k_3y^3)x^3+6k_3yx^5 & 1+k_1x^2+k_2x^4+2\rho_2 x+k_3x^6+6\rho_1y+(3k_1+6k_2x^2+9k_3x^4)y^2+(5k_2+15k_3x^2)y^4\end{bmatrix}
+\frac{\mathrm{d}p_d}{\mathrm{d}p_n^T}=\begin{bmatrix} 1+(r^2+2x^2)k_1+(r^4+4r^2x^2)k_2+2\rho_1y+6\rho_2x+(r^6+6r^4x^2)k_3 & 2xyk_1+4r^2xyk_2+2\rho_1x+2\rho_2y+6xyr^4k_3 \\ 2xyk_1+4r^2xyk_2+2\rho_1y+2\rho_2x+6xyr^4k_3 & 1+(r^2+2y^2)k_1+(r^4+4r^2y^2)k_2+2\rho_2x+6\rho_1y+(r^6+6r^4y^2)k_3\end{bmatrix}
 $$
 
 
@@ -135,7 +139,7 @@ $$
 (8):
 $$
 \begin{aligned}\frac{\partial R_{13}}{\partial r_2}&=\frac{\partial [\gamma \frac{r_1r_3}{\theta^2}+\alpha \frac{r_2}{\theta}]}{\partial r_2}\\
-&=\frac{1}{\theta}[(\alpha\theta-2\gamma)n_1n_2n_3+n_3\gamma+(\beta\theta-\alpha)n_2^2+\alpha]\end{aligned}
+&=\frac{1}{\theta}[(\alpha\theta-2\gamma)n_1n_2n_3+(\beta\theta-\alpha)n_2^2+\alpha]\end{aligned}
 $$
 (9):
 $$
@@ -157,7 +161,7 @@ $$
 (12):
 $$
 \begin{aligned}\frac{\partial R_{21}}{\partial r_3}&=\frac{\partial [\gamma \frac{r_1r_2}{\theta^2}+\alpha \frac{r_3}{\theta}]}{\partial r_3}\\
-&=\frac{1}{\theta}[(\alpha\theta-2\gamma)n_1n_2n_3+n_2\gamma+(\beta\theta-\alpha)n_3^2+\alpha]\end{aligned}
+&=\frac{1}{\theta}[(\alpha\theta-2\gamma)n_1n_2n_3+(\beta\theta-\alpha)n_3^2+\alpha]\end{aligned}
 $$
 (13):
 $$
@@ -207,7 +211,7 @@ $$
 (22):
 $$
 \begin{aligned}\frac{\partial R_{32}}{\partial r_1}&=\frac{\partial [\gamma \frac{r_2r_3}{\theta^2}+\alpha \frac{r_1}{\theta}]}{\partial r_1}\\
-&=\frac{1}{\theta}[(\alpha\theta-2\gamma)n_1n_2n_3+n_3\gamma+(\beta\theta-\alpha)n_1^2+\alpha]\end{aligned}
+&=\frac{1}{\theta}[(\alpha\theta-2\gamma)n_1n_2n_3+(\beta\theta-\alpha)n_1^2+\alpha]\end{aligned}
 $$
 (23):
 $$
@@ -239,11 +243,11 @@ $$
 \frac{\mathrm{d}u}{\mathrm{d}r^T}=\begin{bmatrix}
 (\frac{2\gamma}{\theta}-\alpha)n_1(n_2^2+n_3^2)&\alpha n_2(n_1^2-1)-\frac{2\gamma n_1^2n_2}{\theta}&\alpha n_3(n_1^2-1)-\frac{2\gamma n_1^2n_3}{\theta}\\
 \frac{1}{\theta}[(\alpha \theta -2\gamma)n_1^2n_2+\gamma n_2-(\beta \theta -\alpha)n_1n_3]&\frac{1}{\theta}[(\alpha \theta -2\gamma)n_2^2n_1+\gamma n_1-(\beta \theta -\alpha)n_2n_3]&\frac{1}{\theta}[(\alpha \theta-2\gamma)n_1n_2n_3-(\beta \theta-\alpha)n_3^2-\alpha]\\
-\frac{1}{\theta}[(\alpha\theta-2\gamma)n_1^2n_3+n_3\gamma+(\beta\theta-\alpha)n_1n_2]&\frac{1}{\theta}[(\alpha\theta-2\gamma)n_1n_2n_3+n_3\gamma+(\beta\theta-\alpha)n_2^2+\alpha]&\frac{1}{\theta}[(\alpha\theta-2\gamma)n_3^2n_1+n_1\gamma+(\beta\theta-\alpha)n_2n_3]\\
-\frac{1}{\theta}[(\alpha\theta-2\gamma)n_1^2n_2+n_2\gamma+(\beta\theta-\alpha)n_1n_3]&\frac{1}{\theta}[(\alpha\theta-2\gamma)n_2^2n_1+n_1\gamma+(\beta\theta-\alpha)n_2n_3]&\frac{1}{\theta}[(\alpha\theta-2\gamma)n_1n_2n_3+n_2\gamma+(\beta\theta-\alpha)n_3^2+\alpha]\\
+\frac{1}{\theta}[(\alpha\theta-2\gamma)n_1^2n_3+n_3\gamma+(\beta\theta-\alpha)n_1n_2]&\frac{1}{\theta}[(\alpha\theta-2\gamma)n_1n_2n_3+(\beta\theta-\alpha)n_2^2+\alpha]&\frac{1}{\theta}[(\alpha\theta-2\gamma)n_3^2n_1+n_1\gamma+(\beta\theta-\alpha)n_2n_3]\\
+\frac{1}{\theta}[(\alpha\theta-2\gamma)n_1^2n_2+n_2\gamma+(\beta\theta-\alpha)n_1n_3]&\frac{1}{\theta}[(\alpha\theta-2\gamma)n_2^2n_1+n_1\gamma+(\beta\theta-\alpha)n_2n_3]&\frac{1}{\theta}[(\alpha\theta-2\gamma)n_1n_2n_3+(\beta\theta-\alpha)n_3^2+\alpha]\\
 \alpha n_1(n_2^2-1)-\frac{2\gamma n_2^2n_1}{\theta}&(\frac{2\gamma}{\theta}-\alpha)n_2(n_1^2+n_3^2)&\alpha n_3(n_2^2-1)-\frac{2\gamma n_2^2n_3}{\theta}\\
 \frac{1}{\theta}[(\alpha \theta-2\gamma)n_1n_2n_3-(\beta \theta-\alpha)n_1^2-\alpha]&\frac{1}{\theta}[(\alpha \theta -2\gamma)n_2^2n_3+\gamma n_3-(\beta \theta -\alpha)n_2n_1]&\frac{1}{\theta}[(\alpha \theta -2\gamma)n_3^2n_2+\gamma n_2-(\beta \theta -\alpha)n_1n_3]\\
 \frac{1}{\theta}[(\alpha \theta -2\gamma)n_1^2n_3+\gamma n_3-(\beta \theta -\alpha)n_1n_2]&\frac{1}{\theta}[(\alpha \theta-2\gamma)n_1n_2n_3-(\beta \theta-\alpha)n_2^2-\alpha]&\frac{1}{\theta}[(\alpha \theta -2\gamma)n_3^2n_1+\gamma n_1-(\beta \theta -\alpha)n_2n_3]\\
-\frac{1}{\theta}[(\alpha\theta-2\gamma)n_1n_2n_3+n_3\gamma+(\beta\theta-\alpha)n_1^2+\alpha]&\frac{1}{\theta}[(\alpha\theta-2\gamma)n_2^2n_3+n_3\gamma+(\beta\theta-\alpha)n_1n_2]&\frac{1}{\theta}[(\alpha\theta-2\gamma)n_3^2n_2+n_2\gamma+(\beta\theta-\alpha)n_1n_3]\\
+\frac{1}{\theta}[(\alpha\theta-2\gamma)n_1n_2n_3+(\beta\theta-\alpha)n_1^2+\alpha]&\frac{1}{\theta}[(\alpha\theta-2\gamma)n_2^2n_3+n_3\gamma+(\beta\theta-\alpha)n_1n_2]&\frac{1}{\theta}[(\alpha\theta-2\gamma)n_3^2n_2+n_2\gamma+(\beta\theta-\alpha)n_1n_3]\\
 \alpha n_1(n_3^2-1)-\frac{2\gamma n_3^2n_1}{\theta}&\alpha n_2(n_3^2-1)-\frac{2\gamma n_3^2n_2}{\theta}&(\frac{2\gamma}{\theta}-\alpha)n_3(n_2^2+n_1^2)\end{bmatrix}_{9\times 3}
 $$
